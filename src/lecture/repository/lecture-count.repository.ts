@@ -11,15 +11,13 @@ export class LectureCountRepository implements ILectureCountRepository {
     private dataSource: DataSource,
     @InjectRepository(LectureCount) private readonly repository: Repository<LectureCount>,
   ) {}
-
   async checkLectureCount(lecture: Lecture) {
     return await this.dataSource.transaction(async (manager: EntityManager) => {
       const lectureCount = await manager.findOne(LectureCount, {
         where: { lecture: { id: lecture.id } },
         lock: { mode: "pessimistic_write" },
       })
-
-      if (!lectureCount || lectureCount.count >= 30) {
+      if (!lectureCount || lectureCount.count >= lectureCount.limit) {
         return false
       }
 

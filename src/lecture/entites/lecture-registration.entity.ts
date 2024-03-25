@@ -1,4 +1,4 @@
-import { TimeStampEntity } from "@root/shared/entity/time-stamp.entity"
+import { TimeStampEntity } from "../../shared/entity/time-stamp.entity"
 import {
   Column,
   Entity,
@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm"
 import { ApiProperty } from "@nestjs/swagger"
-import { Lecture } from "@root/lecture/entites/lecture.entity"
-import { Client } from "@root/client/entities/client.entity"
+import { Lecture } from "../entites/lecture.entity"
+import { Client } from "../../client/entities/client.entity"
 
 @Entity()
 export class LectureRegistration extends TimeStampEntity {

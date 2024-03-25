@@ -8,7 +8,5 @@ export abstract class ILectureRegistrationRepository {
     lecture: Lecture,
   ): Promise<LectureRegistration> | null
 
-  abstract findAllByClientId(clientId: string): Promise<LectureRegistration[]>
-
   abstract create(client: Client, lecture: Lecture): Promise<LectureRegistration>
 }

@@ -12,6 +12,6 @@ export class ClientRepository implements IClientRepository {
   ) {}
 
   async findById(id: string) {
-    return this.repository.findOneOrFail({ where: { id } })
+    return this.repository.findOne({ where: { id } })
   }
 }

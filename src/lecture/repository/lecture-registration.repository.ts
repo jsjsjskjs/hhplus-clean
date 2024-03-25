@@ -12,20 +12,12 @@ export class LectureRegistrationRepository implements ILectureRegistrationReposi
     @InjectRepository(LectureRegistration)
     private readonly repository: Repository<LectureRegistration>,
   ) {}
-
   async findOneByClientIdAndLectureId(client: Client, lecture: Lecture) {
     return this.repository.findOne({
       relations: ["client", "lecture"],
       where: { client: { id: client.id }, lecture: { id: lecture.id } },
     })
   }
-  async findAllByClientId(clientId: string) {
-    return this.repository.find({
-      relations: ["client"],
-      where: { client: { id: clientId } },
-    })
-  }
-
   async create(client: Client, lecture: Lecture) {
     const lectureRegistration = new LectureRegistration()
     lectureRegistration.client = client

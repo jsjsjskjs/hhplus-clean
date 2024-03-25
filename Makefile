@@ -44,6 +44,12 @@ test-watch:
 test:
 	@npm run test
 
+test-watch:
+	@npm run test:watch
+
+test-cov:
+	@npm run test:cov
+
 mig-gen: clean run-db
 	@npm run build
 	@DB_HOST=$(DB_HOST) \

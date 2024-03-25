@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common"
-import { IClientRepository } from "@root/client/interface/client.repository.interface"
-import { Client } from "@root/client/entities/client.entity"
+import { IClientRepository } from "../interface/client.repository.interface"
+import { Client } from "../entities/client.entity"
 
 @Injectable()
 export class ClientService {
@@ -9,7 +9,6 @@ export class ClientService {
   ) {}
   async findById(id: string): Promise<Client> {
     const client = await this.iClientRepo.findById(id)
-    console.log("client", client)
     return client
   }
 }

@@ -1,9 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm"
-import { TimeStampEntity } from "@root/shared/entity/time-stamp.entity"
+import { TimeStampEntity } from "../../shared/entity/time-stamp.entity"
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
-import { LectureRegistration } from "@root/lecture/entites/lecture-registration.entity"
-import { isArray } from "class-validator"
-import { LectureCount } from "@root/lecture/entites/lecture-count.entity"
+import { LectureCount } from "../entites/lecture-count.entity"
 
 @Entity()
 export class Lecture extends TimeStampEntity {

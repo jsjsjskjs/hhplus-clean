@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm"
-import { TimeStampEntity } from "@root/shared/entity/time-stamp.entity"
+import { TimeStampEntity } from "../../shared/entity/time-stamp.entity"
 import { ApiProperty } from "@nestjs/swagger"
-import { Lecture } from "@root/lecture/entites/lecture.entity"
+import { Lecture } from "../entites/lecture.entity"
 
 @Entity()
 export class LectureCount extends TimeStampEntity {
@@ -20,4 +20,8 @@ export class LectureCount extends TimeStampEntity {
   @ApiProperty({ type: Number })
   @Column({ nullable: false, default: 0 })
   count: number
+
+  @ApiProperty({ type: Number })
+  @Column({ nullable: false, default: 0 })
+  limit: number
 }

@@ -9,12 +9,7 @@ export class LectureRepository implements ILectureRepository {
   constructor(
     @InjectRepository(Lecture) private readonly respository: Repository<Lecture>,
   ) {}
-
   async findById(id: string) {
-    return this.respository.findOneByOrFail({ id })
-  }
-
-  async findAll() {
-    return this.respository.find()
+    return this.respository.findOne({ where: { id } })
   }
 }

@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
-import { TimeStampEntity } from "@root/shared/entity/time-stamp.entity"
+import { TimeStampEntity } from "../../shared/entity/time-stamp.entity"
 import { ApiProperty } from "@nestjs/swagger"
 
 @Entity()
