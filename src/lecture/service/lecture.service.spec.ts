@@ -9,6 +9,7 @@ import { Client } from "../../client/entities/client.entity"
 import { Lecture } from "../entites/lecture.entity"
 import { LectureRegistration } from "../entites/lecture-registration.entity"
 import { BadRequestException } from "@nestjs/common"
+import { CheckLectureCountFailType } from "../../shared/enum/lecture"
 
 describe("LectureService", () => {
   let lectureService: LectureService
@@ -21,6 +22,7 @@ describe("LectureService", () => {
   beforeEach(() => {
     // Mock Repositories and Services 생성
     mockILectureRepo = {
+      findAll: jest.fn().mockResolvedValue([new Lecture()]),
       findById: jest.fn().mockResolvedValue(new Lecture()),
     }
     mockILectureRegistrationRepo = {
@@ -28,6 +30,7 @@ describe("LectureService", () => {
         .fn()
         .mockResolvedValue(new LectureRegistration()),
       create: jest.fn().mockResolvedValue(new LectureRegistration()),
+      findAllByClientId: jest.fn().mockResolvedValue([new LectureRegistration()]),
     }
     mockILectureCountRepo = {
       checkLectureCount: jest.fn().mockResolvedValue(true),
@@ -83,6 +86,11 @@ describe("LectureService", () => {
         mockILectureRepo.findById = jest
           .fn()
           .mockResolvedValueOnce({ openDate: new Date() })
+
+        mockILectureCountRepo.checkLectureCount = jest.fn().mockResolvedValueOnce({
+          isPossible: false,
+          type: CheckLectureCountFailType.REGISTRATION,
+        })
         await lectureService.registerForLecture({ userId: "1", lectureId: "1" })
       } catch (e) {
         expect(e.message).toEqual("이미 수강신청한 강의입니다.")
@@ -98,7 +106,10 @@ describe("LectureService", () => {
         mockILectureRegistrationRepo.findOneByClientIdAndLectureId = jest
           .fn()
           .mockResolvedValueOnce(null)
-        mockILectureCountRepo.checkLectureCount = jest.fn().mockResolvedValueOnce(false)
+        mockILectureCountRepo.checkLectureCount = jest.fn().mockResolvedValueOnce({
+          isPossible: false,
+          type: CheckLectureCountFailType.COUNT,
+        })
         await lectureService.registerForLecture({ userId: "1", lectureId: "1" })
       } catch (e) {
         expect(e.message).toEqual("강의 정원이 초과되었습니다.")
@@ -113,7 +124,10 @@ describe("LectureService", () => {
       mockILectureRegistrationRepo.findOneByClientIdAndLectureId = jest
         .fn()
         .mockResolvedValueOnce(null)
-      mockILectureCountRepo.checkLectureCount = jest.fn().mockResolvedValueOnce(true)
+      mockILectureCountRepo.checkLectureCount = jest.fn().mockResolvedValueOnce({
+        isPossible: true,
+        type: CheckLectureCountFailType.NONE,
+      })
       const result = await lectureService.registerForLecture({
         userId: "1",
         lectureId: "1",
@@ -126,7 +140,7 @@ describe("LectureService", () => {
     it("사용자 정보가 없는 경우 400에러를 반환", async () => {
       try {
         mockClientService.findById = jest.fn().mockResolvedValueOnce(null)
-        await lectureService.getRegistrations({ userId: "1", lectureId: "1" })
+        await lectureService.getRegistration({ userId: "1", lectureId: "1" })
       } catch (e) {
         expect(e.message).toEqual("사용자 혹은 강의 정보가 없습니다.")
         expect(e).toBeInstanceOf(BadRequestException)
@@ -136,7 +150,7 @@ describe("LectureService", () => {
     it("강의 정보가 없는 경우 400에러를 반환", async () => {
       try {
         mockILectureRepo.findById = jest.fn().mockResolvedValueOnce(null)
-        await lectureService.getRegistrations({ userId: "1", lectureId: "1" })
+        await lectureService.getRegistration({ userId: "1", lectureId: "1" })
       } catch (e) {
         expect(e.message).toEqual("사용자 혹은 강의 정보가 없습니다.")
         expect(e).toBeInstanceOf(BadRequestException)
@@ -144,7 +158,7 @@ describe("LectureService", () => {
     })
 
     it("강의 신청 목록이 있는 경우 IResponse를 반환", async () => {
-      const result = await lectureService.getRegistrations({
+      const result = await lectureService.getRegistration({
         userId: "1",
         lectureId: "1",
       })
@@ -155,7 +169,7 @@ describe("LectureService", () => {
       mockILectureRegistrationRepo.findOneByClientIdAndLectureId = jest
         .fn()
         .mockResolvedValueOnce(null)
-      const result = await lectureService.getRegistrations({
+      const result = await lectureService.getRegistration({
         userId: "1",
         lectureId: "1",
       })

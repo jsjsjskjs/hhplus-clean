@@ -22,6 +22,6 @@ export class LectureCount extends TimeStampEntity {
   count: number
 
   @ApiProperty({ type: Number })
-  @Column({ nullable: false, default: 0 })
+  @Column({ nullable: false, default: 30 })
   limit: number
 }
